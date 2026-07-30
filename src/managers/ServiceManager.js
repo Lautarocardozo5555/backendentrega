@@ -34,10 +34,10 @@ export class ServiceManager {
   // Agrega un servicio nuevo
     addService(serviceData) {
     const requiredFields = ["name", "description", "duration", "price", "category", "available"];
-    const hasAllFields = requiredFields.every(f => serviceData[f] !== undefined);
+    const missingFields = requiredFields.filter(f => serviceData[f] === undefined);
 
-    if (!hasAllFields) {
-        throw new Error("Faltan campos obligatorios para crear el servicio");
+    if (missingFields.length > 0) {
+        throw new Error(`Faltan campos obligatorios: ${missingFields.join(", ")}`);
     }
 
     const newService = {

@@ -40,8 +40,42 @@ updateService(id, updatedData) = actualiza un servicio existente
 
 deleteService(id) = elimina un servicio por id
 
-## Ejemplo de uso
-Ver src/app.js para ejemplos de agregar, listar, actualizar y eliminar servicios.
+### Ejemplos de uso
+
+- Listar servicios:
+  GET http://localhost:8080/api/services
+
+- Filtrar por categoría:
+  GET http://localhost:8080/api/services?category=salud
+
+- Filtrar por disponibilidad:
+  GET http://localhost:8080/api/services?available=true
+
+- Obtener servicio por id:
+  GET http://localhost:8080/api/services/1
+
+- Crear servicio:
+  POST http://localhost:8080/api/services
+  Body (JSON):
+  {
+    "name": "Consulta médica",
+    "description": "Atención clínica general",
+    "duration": 30,
+    "price": 1000,
+    "category": "salud",
+    "available": true
+  }
+
+- Actualizar servicio:
+  PUT http://localhost:8080/api/services/1
+  Body (JSON):
+  {
+    "price": 1200,
+    "available": false
+  }
+
+- Eliminar servicio:
+  DELETE http://localhost:8080/api/services/1
 
 ## Autor
 Cardozo Lautaro Gabriel
