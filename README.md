@@ -1,6 +1,5 @@
-# Service Manager
-
-Proyecto Node.js para administrar servicios de un sistema de turnos y reservas.
+# Sistema de Turnos y Reservas (entrega 3)
+Proyecto Node.js con Express y FileSystem para administrar **servicios** y **reservas** con persistencia en archivos JSON.
 
 ## Instalacion
 npm install
@@ -11,71 +10,70 @@ npm start
 ## Variables de entorno
 Crear un archivo .env con 
 PORT=
-NODE_ENV=development
+NODE_ENV=
 El repo incluye .env.example como referencia.
 
 ## Estructura
 src/
   config/env.config.js
-  managers/ServiceManager.js
-  data/services.json
+  managers/
+    ServiceManager.js
+    BookingManager.js
+  routes/
+    services.router.js
+    bookings.router.js
+  data/
+    services.json
+    bookings.json
   app.js
-package.json
+  server.js
+.env
 .env.example
 .gitignore
+package.json
 README.md
 
-## ServiceManager
-Cada servicio tiene la forma: 
-{ id, name, description, duration, price, category, available }
+## Endpoints
+Services
+GET /api/services → devuelve todos los servicios.
 
-## Métodos
-getServices() = devuelve todos los servicios
+GET /api/services/:sid → devuelve un servicio por id.
 
-getServiceById(id) = devuelve un servicio por id
+POST /api/services → crea un servicio nuevo (valida campos).
 
-addService(serviceData) = agrega un servicio nuevo
+PUT /api/services/:sid → actualiza un servicio existente.
 
-updateService(id, updatedData) = actualiza un servicio existente
+DELETE /api/services/:sid → elimina un servicio.
 
-deleteService(id) = elimina un servicio por id
+Ejemplo:
+{
+  "name": "Consulta médica",
+  "description": "Chequeo general",
+  "duration": 30,
+  "price": 1000,
+  "category": "salud",
+  "available": true
+}
 
-### Ejemplos de uso
+Bookings
+POST /api/bookings → crea una reserva.
 
-- Listar servicios:
-  GET http://localhost:8080/api/services
+GET /api/bookings/:bid → devuelve una reserva por id.
 
-- Filtrar por categoría:
-  GET http://localhost:8080/api/services?category=salud
+POST /api/bookings/:bid/services/:sid → agrega un servicio a una reserva existente.
 
-- Filtrar por disponibilidad:
-  GET http://localhost:8080/api/services?available=true
+Ejemplo:
+{
+  "clientName": "Juan Pérez",
+  "clientEmail": "juan@example.com",
+  "date": "2026-08-01",
+  "time": "10:00",
+  "status": "pendiente"
+}
 
-- Obtener servicio por id:
-  GET http://localhost:8080/api/services/1
-
-- Crear servicio:
-  POST http://localhost:8080/api/services
-  Body (JSON):
-  {
-    "name": "Consulta médica",
-    "description": "Atención clínica general",
-    "duration": 30,
-    "price": 1000,
-    "category": "salud",
-    "available": true
-  }
-
-- Actualizar servicio:
-  PUT http://localhost:8080/api/services/1
-  Body (JSON):
-  {
-    "price": 1200,
-    "available": false
-  }
-
-- Eliminar servicio:
-  DELETE http://localhost:8080/api/services/1
+## Persistencia
+Los datos se guardan en: services.json y bookings.json
+Esto asegura que la información no se pierda al reiniciar el servidor.
 
 ## Autor
 Cardozo Lautaro Gabriel

@@ -1,78 +1,50 @@
 import fs from "fs";
+import path from "path";
 
-export class ServiceManager {
-    constructor(filePath) {
-    this.filePath = filePath;
-    this.services = this.loadServices();
-    this.nextId = this.services.length > 0 ? Math.max(...this.services.map(s => s.id)) + 1 : 1;
+const serviceFile = path.resolve('src/data/services.json')
+
+export default class ServiceManager {
+    constructor() {
+        this.file = serviceFile
+        //si el archivo no existe, lo crea vacio
+        if(!fs.existsSync(this.file)) {
+            fs.writeFileSync(this.file, JSON.stringify([]))
+        }
+
+}
+getServices() {
+    const data = fs.readFileSync(this.file, 'utf-8');
+    return JSON.parse(data);
 }
 
-    loadServices() {
-    try {
-        const data = fs.readFileSync(this.filePath, "utf-8");
-        return JSON.parse(data);
-    } catch (error) {
-        console.error("Error al cargar servicios:", error);
-        return [];
-    }
+getServiceById(id) {
+    const services = this.getServices();
+    return services.find(s => s.id === id);
 }
 
-    saveServices() {
-    fs.writeFileSync(this.filePath, JSON.stringify(this.services, null, 2));
-}
-
-  // Devuelve todos los servicios
-    getServices() {
-    return this.services;
-}
-
-  // Devuelve un servicio por id
-    getServiceById(id) {
-    return this.services.find(s => s.id === id) || null;
-}
-
-  // Agrega un servicio nuevo
-    addService(serviceData) {
-    const requiredFields = ["name", "description", "duration", "price", "category", "available"];
-    const missingFields = requiredFields.filter(f => serviceData[f] === undefined);
-
-    if (missingFields.length > 0) {
-        throw new Error(`Faltan campos obligatorios: ${missingFields.join(", ")}`);
-    }
-
-    const newService = {
-        id: this.nextId++,
-        ...serviceData
-    };
-
-    this.services.push(newService);
-    this.saveServices();
+addService(service) {
+    const services = this.getServices();
+    const newService = { id: services.length + 1, ...service };
+    services.push(newService);
+    fs.writeFileSync(this.file, JSON.stringify(services, null, 2));
     return newService;
 }
 
-  // Actualiza un servicio existente
-    updateService(id, updatedData) {
-    const index = this.services.findIndex(s => s.id === id);
-    if (index === -1) {
-    return null;
-    }
-
-    // No se permite modificar el id
-    const { id: _, ...rest } = updatedData;
-    this.services[index] = { ...this.services[index], ...rest };
-    this.saveServices();
-    return this.services[index];
+updateService(id, update) {
+    const services = this.getServices();
+    const index = services.findIndex(s => s.id === id);
+    if (index === -1) return null;
+    services[index] = { ...services[index], ...update, id };
+    fs.writeFileSync(this.file, JSON.stringify(services, null, 2));
+    return services[index];
 }
 
-  // Elimina un servicio por id
-    deleteService(id) {
-    const index = this.services.findIndex(s => s.id === id);
-    if (index === -1) {
-    return null;
-    }
-
-    const deleted = this.services.splice(index, 1)[0];
-    this.saveServices();
+deleteService(id) {
+    const services = this.getServices();
+    const index = services.findIndex(s => s.id === id);
+    if (index === -1) return null;
+    const deleted = services.splice(index, 1)[0];
+    fs.writeFileSync(this.file, JSON.stringify(services, null, 2));
     return deleted;
 }
 }
