@@ -1,5 +1,5 @@
-# Sistema de Turnos y Reservas (entrega 3)
-Proyecto Node.js con Express y FileSystem para administrar **servicios** y **reservas** con persistencia en archivos JSON.
+# Sistema de Turnos y Reservas (entrega 4)
+Proyecto Node.js con Express y FileSystem para administrar **servicios** y **reservas**, reorganizado en tres capas: **routers**, **controllers** y **managers**.
 
 ## Instalacion
 npm install
@@ -16,6 +16,9 @@ El repo incluye .env.example como referencia.
 ## Estructura
 src/
   config/env.config.js
+  controllers/
+    services.controller.js
+    bookings.controller.js
   managers/
     ServiceManager.js
     BookingManager.js
@@ -32,6 +35,13 @@ src/
 .gitignore
 package.json
 README.md
+
+## Separación de responsabilidades
+Routers → definen endpoints y llaman a los controllers.
+
+Controllers → reciben la request (req), validan datos, llaman a los managers y devuelven la response (res).
+
+Managers → manejan la lógica de persistencia en archivos JSON, sin usar req ni res.
 
 ## Endpoints
 Services
