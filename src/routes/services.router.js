@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { getServices, getServiceById, createService, updateService, deleteService } from '../controllers/services.controller.js';
+import {
+    getServices,
+    getServiceById,
+    createService, 
+    updateService,
+    deleteService
+} from "./controllers/services.controller.js"
 
 const router = Router();
 

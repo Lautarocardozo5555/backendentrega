@@ -19,9 +19,15 @@ src/
   controllers/
     services.controller.js
     bookings.controller.js
-  managers/
-    ServiceManager.js
-    BookingManager.js
+  services/
+    services.service.js
+    bookings.service.js
+  repositories/
+    services.repository.js
+    bookings.repository.js
+  dao/
+    services.dao.js
+    bookings.dao.js
   routes/
     services.router.js
     bookings.router.js
@@ -36,26 +42,28 @@ src/
 package.json
 README.md
 
-## Separación de responsabilidades
-Routers → definen endpoints y llaman a los controllers.
+## Arquitectura en capas
+El flujo de la apliación sigue este orden:
+Router → Controller → Service → Repository → DAO → JSON
 
-Controllers → reciben la request (req), validan datos, llaman a los managers y devuelven la response (res).
+Router: define los endpoints y conecta con el controller.
 
-Managers → manejan la lógica de persistencia en archivos JSON, sin usar req ni res.
+Controller: recibe la request (req), llama al service y responde con res.
+
+Service: contiene reglas de negocio (ejemplo: validación de campos, incremento de quantity en reservas).
+
+Repository: expone métodos de acceso a datos (getBookings, getBookingById, createBooking, updateBooking) sin lógica de negocio.
+
+DAO: accede directamente a los archivos JSON para leer y escribir datos.
 
 ## Endpoints
-Services
-GET /api/services → devuelve todos los servicios.
+GET /api/services ====> Lista todos los servicios
+GET /api/services/:sid ====> Obtiene un servicio por ID
+POST /api/services ====> Crea un servicio nuevo
+PUT /api/services/:sid ====> Actualiza un servicio existente
+DELETE /api/service/:sid ====> Elimina un servicio
 
-GET /api/services/:sid → devuelve un servicio por id.
-
-POST /api/services → crea un servicio nuevo (valida campos).
-
-PUT /api/services/:sid → actualiza un servicio existente.
-
-DELETE /api/services/:sid → elimina un servicio.
-
-Ejemplo:
+## Ejemplo body para crear un servicio
 {
   "name": "Consulta médica",
   "description": "Chequeo general",
@@ -65,14 +73,13 @@ Ejemplo:
   "available": true
 }
 
-Bookings
-POST /api/bookings → crea una reserva.
+## Bookings
+GET /api/bookings ===> Lista todas las reservas
+GET /api/bookings/:bid ====> Obtiene una reserva por id
+POST /api/bookings ====> Crea una reserva
+POST /api/bookings/:bid/services/:sid ====> Agrega un servicio a una reserva
 
-GET /api/bookings/:bid → devuelve una reserva por id.
-
-POST /api/bookings/:bid/services/:sid → agrega un servicio a una reserva existente.
-
-Ejemplo:
+## Ejemplo body para crear una reserva
 {
   "clientName": "Juan Pérez",
   "clientEmail": "juan@example.com",

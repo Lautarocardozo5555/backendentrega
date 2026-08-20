@@ -1,46 +1,51 @@
-import ServiceManager from '../managers/ServiceManager.js';
+import * as serviceServices from "../services/services.service.js";
 
-const serviceManager = new ServiceManager();
-//obtener todos los servicios
-export const getServices = (req, res) => {
-    res.json(serviceManager.getServices());
-};
-//obtener un servicio especifico por id
-export const getServiceById = (req, res) => {
-    const id = parseInt(req.params.sid);
-    const service = serviceManager.getServiceById(id);
-    if (!service) return res.status(404).json({ error: 'Servicio no encontrado' });
-    res.json(service);
-};
-//Crear un nuevo servicio
-export const createService = (req, res) => {
-    const { name, description, duration, price, category, available } = req.body;
-    const missingFields = [];
-    if (!name) missingFields.push('name');
-    if (!description) missingFields.push('description');
-    if (!duration) missingFields.push('duration');
-    if (!price) missingFields.push('price');
-    if (!category) missingFields.push('category');
-    if (available === undefined) missingFields.push('available');
 
-    if (missingFields.length > 0) {
-    return res.status(400).json({ error: `Faltan campos obligatorios: ${missingFields.join(', ')}` });
+export const getServices = async (req, res) => {
+    try{
+        const services = await serviceServices.getAllService()
+        res.status(200).json({status:"success", payload:services})
+    } catch(error) {
+        res.status(500).json({status:"error", message: "Error al obtener los servicios"})
+    }
 }
 
-    const newService = serviceManager.addService({ name, description, duration, price, category, available });
-    res.status(201).json(newService);
-};
-//actualizar un servicio existente
-export const updateService = (req, res) => {
-    const id = parseInt(req.params.sid);
-    const updated = serviceManager.updateService(id, req.body);
-    if (!updated) return res.status(404).json({ error: 'Servicio no encontrado' });
-    res.json(updated);
-};
-//eliminar un servicio
-export const deleteService = (req, res) => {
-    const id = parseInt(req.params.sid);
-    const deleted = serviceManager.deleteService(id);
-    if (!deleted) return res.status(404).json({ error: 'Servicio no encontrado' });
-    res.json(deleted);
-};
+export const getServiceById = async (req, res) => {
+    try{
+        const { sid } = req.params
+        const service = await serviceServices.getServiceById(Number(sid))
+
+        res.status(200).json({status:"success", payload:service})
+    } catch(error) {
+        res.status(500).json({status:"errora", message: "Error al obtener el servicio"})
+    }
+}
+
+export const createService = async (req, res) => {
+    try{
+        const service = await serviceServices.createService(req.body)
+        res.status(201).json({status:"success", payload: service})
+    } catch(error) {
+        res.status(400).json({status:"error", message: error.message})
+    }
+}
+
+export const updateService = async (req, res) => {
+    try{
+        const { sid } = req.params
+        const service = await serviceServices.updateService(Number(sid), req.body)
+        res.status(200).json({status:"success", payload:service})
+    } catch (error) {
+        res.status(400).json({status:"error", message: error.message})
+    }
+}
+
+export const deleteService = async (req, res) => {
+    try{
+        const { sid } = req.params
+        const service = await serviceServices.deleteService(Number(sid))
+        res.status(200).json({status:"success", message:"Servicio eliminado"})
+    } catch(error){
+        res.status(500).json ({status:"error", message:"Error al eliminar el servicio"})
+    }
+}
