@@ -37,4 +37,13 @@ export const addServiceToBooking = async (req, res) => {
     } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
     }
+}
+export const deleteBooking = async (req, res) => {
+    try {
+    const { bid } = req.params;
+    const deleted = await bookingsService.deleteBooking(Number(bid));
+    res.json({ status: "success", payload: deleted });
+} catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+}
 };

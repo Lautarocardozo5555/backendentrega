@@ -1,21 +1,23 @@
-# Sistema de Turnos y Reservas (entrega 4)
-Proyecto Node.js con Express y FileSystem para administrar **servicios** y **reservas**, reorganizado en tres capas: **routers**, **controllers** y **managers**.
+# Sistema de Turnos y Reservas (entrega 5)
+Proyecto desarrollado en Node.js con Express y persistencia en FileSystem. La aplicación permite administrar **servicios** y **reservas**, organizada bajo una **arquitectura en capas**.
 
 ## Instalacion
+```bash
 npm install
 
 ## Ejecución
 npm start
 
 ## Variables de entorno
-Crear un archivo .env con 
+Crear un archivo .env con las siguientes variables:
 PORT=
 NODE_ENV=
 El repo incluye .env.example como referencia.
 
 ## Estructura
 src/
-  config/env.config.js
+  config/
+    env.config.js
   controllers/
     services.controller.js
     bookings.controller.js
@@ -52,7 +54,7 @@ Controller: recibe la request (req), llama al service y responde con res.
 
 Service: contiene reglas de negocio (ejemplo: validación de campos, incremento de quantity en reservas).
 
-Repository: expone métodos de acceso a datos (getBookings, getBookingById, createBooking, updateBooking) sin lógica de negocio.
+Repository: expone métodos de acceso a datos sin lógica de negocio.
 
 DAO: accede directamente a los archivos JSON para leer y escribir datos.
 

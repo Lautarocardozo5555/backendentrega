@@ -1,32 +1,42 @@
-import fs from"fs/promises"
-import path from "path"
-
-const file = path.resolve("src/data/bookings.json")
+import fs from "fs/promises";
+const path = "./src/data/bookings.json";
 
 export default class BookingsDAO {
-    async getBookings() {
-        const data = await fs.readFile(file, "utf-8")
-        return JSON.parse(data)
-    }
-    
-    async getBookingById(id) {
-        const bookings = await this.getAll()
-        return bookings.find(b => b.id === Number(id))
-    }
+    async getAll() {
+        const data = await fs.readFile(path, "utf-8");
+        return JSON.parse(data);
+}
 
-    async createBooking(booking) {
-        const bookings = await this.getAll()
-        const newBooking = {id: bookings.length + 1, services:[], ...bookings}
-        bookings.push(newBooking)
-        await fs.writeFile(file, JSON.stringify(bookings, null, 2))
-        return newBooking
-    }
-    async updateBooking(id, updatedBooking) {
-        const bookings = await this.getBookings();
-        const index = bookings.findIndex(b => b.id === Number(id));
+    async getById(id) {
+        const bookings = await this.getAll();
+        return bookings.find(b => b.id === id);
+}
+
+    async create(booking) {
+        const bookings = await this.getAll();
+        booking.id = bookings.length + 1;
+        bookings.push(booking);
+        await fs.writeFile(path, JSON.stringify(bookings, null, 2));
+        return booking;
+}
+
+    async update(id, data) {
+        const bookings = await this.getAll();
+        const index = bookings.findIndex(b => b.id === id);
         if (index === -1) return null;
-        bookings[index] = updatedBooking;
-        await fs.writeFile(file, JSON.stringify(bookings, null, 2));
+        bookings[index] = { ...bookings[index], ...data };
+        await fs.writeFile(path, JSON.stringify(bookings, null, 2));
         return bookings[index];
-    }
+}
+
+async deleteBooking(id) {
+    const bookings = await this.getAll();
+    const index = bookings.findIndex(b => b.id ===Number(id));
+    if (index === -1) return null;
+
+    const deleted = bookings.splice(index, 1)[0];
+    await fs.writeFile(path, JSON.stringify(bookings, null, 2));
+    return deleted;
+}
+
 }

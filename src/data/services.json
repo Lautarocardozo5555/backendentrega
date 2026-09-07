@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "name": "Consulta pediatra",
+    "description": "Chequeo general",
+    "duration": 30,
+    "price": 1000,
+    "category": "salud",
+    "available": true,
+    "id": 1
+  },
+  {
+    "name": "Consulta medica",
+    "description": "Chequeo general",
+    "duration": 60,
+    "price": 2000,
+    "category": "salud",
+    "available": true,
+    "id": 2
+  }
+]

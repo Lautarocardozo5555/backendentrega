@@ -1,41 +1,38 @@
-import fs from "fs/promises"
+import fs from "fs/promises";
+const path = "./src/data/services.json";
 
 export default class ServicesDAO {
-    constructor(){
-        this.path = "./src/data/services.json"
-    }
+    async getAll() {
+        const data = await fs.readFile(path, "utf-8");
+        return JSON.parse(data);
+}
 
-    async getServices() {
-        const data = await fs.readFile(file, "utf-8")
-        return JSON.parse(data)
-    }
+    async getById(id) {
+        const services = await this.getAll();
+        return services.find(s => s.id === id);
+}
 
-    async getServiceById(id) {
-        const services = await this.getServices()
-        return services.find(s => s.id === Number(id))
-    }
+    async create(service) {
+        const services = await this.getAll();
+        service.id = services.length + 1;
+        services.push(service);
+        await fs.writeFile(path, JSON.stringify(services, null, 2));
+        return service;
+}
 
-    async createService(service) {
-        const services = await this.getServices()
-        const newService = {id:services.length + 1, ...service }
-        services.push(newService)
-        await fs.writeFile(this.path, JSON.stringify(services, null, 2))
-        return newService
-    }
-    async updateService (id, data) {
-        const services = await this.getServices()
-        const index = services.findIndex(s => s.id === Number(id))
-        if(index === -1) return null 
-        services[index] = {...services[index], ...data, id}
-        await fs.writeFile(this.path, JSON.stringify(services, null, 2))
-        return services[index]
-    }
-    async deleteService (id) {
-        const services = await this.getServices()
-        const index = services.findIndex(s => s.id === id)
-        if(index === -1 ) return null 
-        const deleted = services.splice(index, 1)[0]
-        await fs.writeFile(this.path, JSON.stringify(services, null, 2))
-        return deleted
-    }
+    async update(id, data) {
+        const services = await this.getAll();
+        const index = services.findIndex(s => s.id === id);
+        if (index === -1) return null;
+        services[index] = { ...services[index], ...data };
+        await fs.writeFile(path, JSON.stringify(services, null, 2));
+        return services[index];
+}
+
+    async delete(id) {
+        const services = await this.getAll();
+        const filtered = services.filter(s => s.id !== id);
+        await fs.writeFile(path, JSON.stringify(filtered, null, 2));
+        return true;
+}
 }

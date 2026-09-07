@@ -1,7 +1,7 @@
 import * as repositories from "../repositories/services.repository.js"
 
 export const getAllService = async () => {
-    return await repositories.getAllService()
+    return await repositories.getAllServices()
 }
 
 export const getServiceById = async (id) => {
