@@ -1,12 +1,18 @@
-import { Router } from 'express';
-import * as bookingsController from "../controllers/bookings.controller.js";
+import { Router } from "express";
+import {
+    createBooking,
+    getBookingById,
+    addServiceToBooking,
+    deleteBooking,
+    getAllBookings
+} from "../controllers/bookings.controller.js";
 
 const router = Router();
 
-router.get("/", bookingsController.getBookings)
-router.get("/:bid", bookingsController.getBookingById)
-router.post("/", bookingsController.createBooking)
-router.post("/:bid/services/:sid", bookingsController.addServiceToBooking)
-router.delete("/:bid", bookingsController.deleteBooking)
+router.get("/", getAllBookings)
+router.post("/", createBooking);
+router.get("/:bid", getBookingById);
+router.post("/:bid/services/:sid", addServiceToBooking);
+router.delete("/:bid", deleteBooking);
 
 export default router;

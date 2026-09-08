@@ -1,46 +1,45 @@
-import * as bookingsRepo from "../repositories/bookings.repository.js";
-import * as servicesRepo from "../repositories/services.repository.js";
+import BookingsRepository from "../repositories/bookings.repository.js";
 
-export const getBookings = async () => {
-    return await bookingsRepo.getBookings();
-};
+export default class BookingsService {
+    constructor() {
+        this.repository = new BookingsRepository();
+}
 
-export const getBookingById = async (id) => {
-    return await bookingsRepo.getBookingById(id);
-};
+    async getAllBookings() {
+        return await this.repository.getAllBookings();
+}
 
-export const createBooking = async (data) => {
-    const { clientName, clientEmail, date, time, status } = data;
+    async createBooking(data) {
+        const { clientName, clientEmail, date, time, status } = data;
+
     if (!clientName || !clientEmail || !date || !time || !status) {
-    throw new Error("Todos los campos son obligatorios");
-}
-const booking = {
-    ...data, services: []
-}
-    return await bookingsRepo.createBooking(booking);
-};
+        throw new Error("Todos los campos de la reserva son obligatorios");
+    }
 
-export const deleteBooking = async (id) => {
-    const booking = await bookingsRepo.getBookingById(id);
-    if (!booking) throw new Error("Reserva no encontrada");
-    return await bookingsRepo.deleteBooking(id);
-};
-
-export const addServiceToBooking = async (bid, sid) => {
-    const booking = await bookingsRepo.getBookingById(bid);
-    if (!booking) throw new Error("Reserva no encontrada");
-
-    if (!booking.services) booking.services = [];
-
-    const service = await servicesRepo.getServiceById(sid);
-    if (!service) throw new Error("Servicio no encontrado");
-
-    const existingService = booking.services.find(s => s.service === sid);
-    if (existingService) {
-    existingService.quantity += 1;
-} else {
-    booking.services.push({ service: sid, quantity: 1 });
+    return await this.repository.createBooking(data);
 }
 
-    return await bookingsRepo.updateBooking(bid, booking);
-};
+    async getBookingById(id) {
+        const booking = await this.repository.getBookingById(id);
+    if (!booking) {
+    throw new Error("Reserva no encontrada");
+    }
+    return booking;
+}
+
+    async addServiceToBooking(bid, sid, quantity) {
+        const booking = await this.repository.getBookingById(bid);
+    if (!booking) {
+    throw new Error("Reserva no encontrada");
+    }
+    return await this.repository.addServiceToBooking(bid, sid, quantity);
+}
+
+    async deleteBooking(id) {
+        const booking = await this.repository.getBookingById(id);
+    if (!booking) {
+        throw new Error("Reserva no encontrada");
+    }
+    return await this.repository.deleteBooking(id);
+}
+}

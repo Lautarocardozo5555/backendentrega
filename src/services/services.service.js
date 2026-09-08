@@ -1,41 +1,47 @@
-import * as repositories from "../repositories/services.repository.js"
+import ServicesRepository from "../repositories/services.repository.js";
 
-export const getAllService = async () => {
-    return await repositories.getAllServices()
+export default class ServicesService {
+    constructor() {
+        this.repository = new ServicesRepository();
 }
 
-export const getServiceById = async (id) => {
-    return await repositories.getServiceById(id)
+    async getAllServices() {
+        return await this.repository.getAllServices();
 }
 
-export const createService = async (data) => {
-    const {
-        name,
-        description,
-        price,
-        category,
-        duration,
-        available
-    } = data
-    if(!name || !description || !price || !category || !duration || available === undefined) {
-        throw new Error("Todos los campos son obligatorios")
+    async getServiceById(id) {
+        const service = await this.repository.getServiceById(id);
+        if (!service) {
+        throw new Error("Servicio no encontrado");
     }
-    return await repositories.createService(data)
+    return service;
 }
 
-export const updateService = async(id, data) => {
-    const service = await repositories.getServiceById(id)
-    if(!service) {
-        throw new Error("Servicio no encontrado")
+    async createService(data) {
+        const { name, description, price, category, duration, available } = data;
+
+    if (!name || !description || !price || !category || !duration || available === undefined) {
+        throw new Error("Todos los campos son obligatorios");
     }
-    delete data.id
-    return await repositories.updateService(id, data)
+
+    return await this.repository.createService(data);
 }
 
-export const deleteService = async (id) => {
-    const service = await repositories.getServiceById(id)
-        if(!service) {
-        throw new Error("Servicio no encontrado")
+    async updateService(id, update) {
+        const service = await this.repository.getServiceById(id);
+    if (!service) {
+        throw new Error("Servicio no encontrado");
     }
-    return await repositories.deleteService(id)
+
+    delete update.id; 
+    return await this.repository.updateService(id, update);
+}
+
+    async deleteService(id) {
+        const service = await this.repository.getServiceById(id);
+    if (!service) {
+        throw new Error("Servicio no encontrado");
+    }
+    return await this.repository.deleteService(id);
+}
 }

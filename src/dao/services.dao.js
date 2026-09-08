@@ -1,38 +1,24 @@
-import fs from "fs/promises";
-const path = "./src/data/services.json";
+import Service from "../models/service.model.js";
 
 export default class ServicesDAO {
-    async getAll() {
-        const data = await fs.readFile(path, "utf-8");
-        return JSON.parse(data);
+    async getServices() {
+        return await Service.find();
 }
 
-    async getById(id) {
-        const services = await this.getAll();
-        return services.find(s => s.id === id);
+    async getServiceById(id) {
+        return await Service.findById(id);
 }
 
-    async create(service) {
-        const services = await this.getAll();
-        service.id = services.length + 1;
-        services.push(service);
-        await fs.writeFile(path, JSON.stringify(services, null, 2));
-        return service;
+    async createService(data) {
+        const newService = new Service(data);
+        return await newService.save();
 }
 
-    async update(id, data) {
-        const services = await this.getAll();
-        const index = services.findIndex(s => s.id === id);
-        if (index === -1) return null;
-        services[index] = { ...services[index], ...data };
-        await fs.writeFile(path, JSON.stringify(services, null, 2));
-        return services[index];
+    async updateService(id, update) {
+        return await Service.findByIdAndUpdate(id, update, { new: true });
 }
 
-    async delete(id) {
-        const services = await this.getAll();
-        const filtered = services.filter(s => s.id !== id);
-        await fs.writeFile(path, JSON.stringify(filtered, null, 2));
-        return true;
+    async deleteService(id) {
+        return await Service.findByIdAndDelete(id);
 }
 }

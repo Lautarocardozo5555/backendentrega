@@ -1,42 +1,27 @@
-import fs from "fs/promises";
-const path = "./src/data/bookings.json";
+import Booking from "../models/booking.model.js";
 
 export default class BookingsDAO {
-    async getAll() {
-        const data = await fs.readFile(path, "utf-8");
-        return JSON.parse(data);
+    async getBookings() {
+        return await Booking.find().populate("services.service");
 }
 
-    async getById(id) {
-        const bookings = await this.getAll();
-        return bookings.find(b => b.id === id);
+    async createBooking(data) {
+        const newBooking = new Booking(data);
+        return await newBooking.save();
 }
 
-    async create(booking) {
-        const bookings = await this.getAll();
-        booking.id = bookings.length + 1;
-        bookings.push(booking);
-        await fs.writeFile(path, JSON.stringify(bookings, null, 2));
-        return booking;
+    async getBookingById(id) {
+        return await Booking.findById(id).populate("services.service");
 }
 
-    async update(id, data) {
-        const bookings = await this.getAll();
-        const index = bookings.findIndex(b => b.id === id);
-        if (index === -1) return null;
-        bookings[index] = { ...bookings[index], ...data };
-        await fs.writeFile(path, JSON.stringify(bookings, null, 2));
-        return bookings[index];
+    async addServiceToBooking(bid, sid, quantity = 1) {
+        const booking = await Booking.findById(bid);
+        if (!booking) return null;
+
+    booking.services.push({ service: sid, quantity });
+    return await booking.save();
 }
-
-async deleteBooking(id) {
-    const bookings = await this.getAll();
-    const index = bookings.findIndex(b => b.id ===Number(id));
-    if (index === -1) return null;
-
-    const deleted = bookings.splice(index, 1)[0];
-    await fs.writeFile(path, JSON.stringify(bookings, null, 2));
-    return deleted;
+    async deleteBooking(id) {
+        return await Booking.findByIdAndDelete(id);
 }
-
 }

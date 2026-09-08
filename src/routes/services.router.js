@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-    getServices,
+    getAllServices,
     getServiceById,
     createService, 
     updateService,
@@ -9,7 +9,7 @@ import {
 
 const router = Router();
 
-router.get('/', getServices);
+router.get('/', getAllServices);
 router.get('/:sid', getServiceById);
 router.post('/', createService);
 router.put('/:sid', updateService);

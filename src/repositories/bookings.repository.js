@@ -1,22 +1,26 @@
 import BookingsDAO from "../dao/bookings.dao.js";
 
-const bookingsDAO = new BookingsDAO();
+export default class BookingsRepository {
+    constructor() {
+        this.dao = new BookingsDAO();
+    }
 
-export const getBookings = async () => {
-    return await bookingsDAO.getAll();}
+    async getAllBookings() {
+        return await this.dao.getBookings();
+}
 
+    async createBooking(data) {
+        return await this.dao.createBooking(data);
+}
 
-export const getBookingById = async (id) => {
-    return await bookingsDAO.getById(id);}
+    async getBookingById(id) {
+        return await this.dao.getBookingById(id);
+}
 
-
-export const createBooking = async (data) =>{
-    return await bookingsDAO.create(data);}
-
-
-export const updateBooking = async (id, booking) => {
-    return await bookingsDAO.update(id, booking);}
-
-export const deleteBooking = async (id) => {
-    return await bookingsDAO.deleteBooking(id);
-};
+    async addServiceToBooking(bid, sid, quantity) {
+        return await this.dao.addServiceToBooking(bid, sid, quantity);
+}
+    async deleteBooking(id) {
+        return await this.dao.deleteBooking(id);
+}
+}

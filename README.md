@@ -1,5 +1,5 @@
-# Sistema de Turnos y Reservas (entrega 5)
-Proyecto desarrollado en Node.js con Express y persistencia en FileSystem. La aplicación permite administrar **servicios** y **reservas**, organizada bajo una **arquitectura en capas**.
+# Sistema de Turnos y Reservas (entrega 6)
+Proyecto desarrollado en Node.js con Express y persistencia en MongoDB Atlas. La aplicación permite administrar **servicios** y **reservas**, organizada bajo una **arquitectura en capas**.
 
 ## Instalacion
 ```bash
@@ -12,12 +12,14 @@ npm start
 Crear un archivo .env con las siguientes variables:
 PORT=
 NODE_ENV=
+MONGO_URI=
 El repo incluye .env.example como referencia.
 
 ## Estructura
 src/
   config/
     env.config.js
+    db.config.js
   controllers/
     services.controller.js
     bookings.controller.js
@@ -33,9 +35,9 @@ src/
   routes/
     services.router.js
     bookings.router.js
-  data/
-    services.json
-    bookings.json
+  models/
+    service.model.js
+    booking.model.js
   app.js
   server.js
 .env
@@ -44,9 +46,10 @@ src/
 package.json
 README.md
 
+
 ## Arquitectura en capas
 El flujo de la apliación sigue este orden:
-Router → Controller → Service → Repository → DAO → JSON
+Router → Controller → Service → Repository → DAO → MongoDB Atlas
 
 Router: define los endpoints y conecta con el controller.
 
@@ -56,7 +59,7 @@ Service: contiene reglas de negocio (ejemplo: validación de campos, incremento 
 
 Repository: expone métodos de acceso a datos sin lógica de negocio.
 
-DAO: accede directamente a los archivos JSON para leer y escribir datos.
+DAO: accede directamente a la base de datos.
 
 ## Endpoints
 GET /api/services ====> Lista todos los servicios
@@ -91,7 +94,7 @@ POST /api/bookings/:bid/services/:sid ====> Agrega un servicio a una reserva
 }
 
 ## Persistencia
-Los datos se guardan en: services.json y bookings.json
+Los datos se guardan en MongoDB Atlas con las colecciones: services, bookings y messages
 Esto asegura que la información no se pierda al reiniciar el servidor.
 
 ## Autor

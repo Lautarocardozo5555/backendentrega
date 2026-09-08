@@ -1,23 +1,26 @@
 import ServicesDAO from "../dao/services.dao.js";
 
-const serviceDAO = new ServicesDAO()
+export default class ServicesRepository{
+    constructor() {
+        this.dao = new ServicesDAO()
+    }
+    async getAllServices() {
+        return await this.dao.getServices()
+    }
 
-export const getAllServices = async () => {
-    return await serviceDAO.getAll()
-}
+    async getServiceById(id) {
+        return await this.dao.getServiceById(id)
+    }
 
-export const getServiceById = async (id) => {
-    return await serviceDAO.getById(id)
-} 
+    async createService(data) {
+        return await this.dao.createService(data)
+    }
 
-export const createService = async (data) => {
-    return await serviceDAO.create(data)
-}
+    async updateService(id, update) {
+        return await this.dao.updateService(id, update)
+    }
 
-export const updateService = async (id, data) => {
-    return await serviceDAO.update(id,data)
-}
-
-export const deleteService = async (id) => {
-    return await serviceDAO.delete(id)
+    async deleteService(id) {
+        return await this.dao.deleteService(id)
+    }
 }
