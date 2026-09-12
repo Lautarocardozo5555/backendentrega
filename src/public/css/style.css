@@ -184,6 +184,7 @@ body {
     color: #999;
     margin-top: 40px;
 }
+
 .message-form {
     display: flex;
     flex-direction: column;
@@ -208,4 +209,52 @@ body {
 
 .message-form button {
     align-self: flex-start;
+}
+
+/* Formularios de filtros */
+form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+form select, form input {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #1e1e1e;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+form button {
+    background: #ff6600;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+form button:hover {
+    background: #e65c00;
+}
+
+/* Paginación */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 10px;
+    color: #ff6600;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
 }

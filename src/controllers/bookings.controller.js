@@ -2,9 +2,10 @@ import BookingsService from "../services/bookings.service.js";
 
 const booking = new BookingsService();
 
-export const getAllBookings = async (req, res) => {
+export const getBookings = async (req, res) => {
 try {
-    const bookings = await booking.getAllBookings();
+    const bookings = await booking.getAllBookings(); 
+
     res.status(200).json({ status: "success", payload: bookings });
 } catch (error) {
     res.status(500).json({ status: "error", message: "Error al obtener las reservas" });

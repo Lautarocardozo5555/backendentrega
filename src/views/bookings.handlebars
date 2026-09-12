@@ -1,7 +1,15 @@
 <div class="container">
     <h1>Reservas</h1>
 
-    {{#if bookings.length}}
+<form method="GET" action="/views/bookings">
+<select name="order">
+    <option value="asc" {{#if orderAsc}}selected{{/if}}>Más antiguas primero</option>
+    <option value="desc" {{#if orderDesc}}selected{{/if}}>Más recientes primero</option>
+</select>
+<button type="submit">Ordenar</button>
+</form>
+
+{{#if bookings.length}}
     <div class="cards">
         {{#each bookings}}
         <div class="card">
@@ -9,9 +17,19 @@
             <p>Fecha: {{this.date}} | Hora: {{this.time}}</p>
             <a class="btn" href="/views/bookings/{{this._id}}">Ver detalle</a>
         </div>
-        {{/each}}
+    {{/each}}
     </div>
 {{else}}
     <p>No hay reservas registradas.</p>
 {{/if}}
+
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="/views/bookings?page={{prevPage}}">Anterior</a>
+    {{/if}}
+    Página {{page}} de {{totalPages}}
+    {{#if hasNextPage}}
+        <a href="/views/bookings?page={{nextPage}}">Siguiente</a>
+    {{/if}}
+</div>
 </div>

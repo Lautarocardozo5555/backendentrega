@@ -42,4 +42,27 @@ export default class BookingsService {
     }
     return await this.repository.deleteBooking(id);
 }
+
+async getAdvancedBookings({ order = "desc", page = 1, limit = 3 }) {
+    const sort = { createdAt: order === "desc" ? -1 : 1 };
+   const skip = (page - 1) * limit;
+
+    const [docs, totalDocs] = await Promise.all([
+    this.repository.getFiltered({}, sort, skip, limit),
+    this.repository.countDocuments({})
+]);
+
+    const totalPages = Math.ceil(totalDocs / limit);
+
+return {
+    payload: docs,
+    page: Number(page),
+    limit: Number(limit),
+    totalDocs,
+    totalPages,
+    hasPrevPage: page > 1,
+    hasNextPage: page < totalPages
+};
+}
+
 }

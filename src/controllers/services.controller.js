@@ -2,12 +2,12 @@ import ServicesService from "../services/services.service.js";
 
 const service = new ServicesService();
 
-export const getAllServices = async (req, res) => {
+export const getServices = async (req, res) => {
 try {
-    const services = await service.getAllServices();
-    res.status(200).json({ status: "success", payload: services });
+    const result = await service.getAdvancedServices(req.query);
+    res.status(200).json(result);
 } catch (error) {
-    res.status(500).json({ status: "error", message: "Error al obtener los servicios" });
+    res.status(500).json({ status: "error", message: error.message });
 }
 };
 

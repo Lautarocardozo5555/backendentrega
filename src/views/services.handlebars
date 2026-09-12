@@ -1,17 +1,63 @@
 <div class="container">
-<h1>Servicios disponibles</h1>
+    <h1>Servicios disponibles</h1>
+
+<form method="GET" action="/views/services">
+<select name="category">
+    <option value="" {{#unless category}}selected{{/unless}}>Todas</option>
+    <option value="Mantenimiento" {{#if categoryIsMantenimiento}}selected{{/if}}>Mantenimiento</option>
+    <option value="Estética" {{#if categoryIsEstetica}}selected{{/if}}>Estética</option>
+    <option value="Reparación" {{#if categoryIsReparacion}}selected{{/if}}>Reparación</option>
+</select>
+
+<select name="available">
+    <option value="" {{#unless available}}selected{{/unless}}>Todos</option>
+    <option value="true" {{#if availableTrue}}selected{{/if}}>Disponibles</option>
+    <option value="false" {{#if availableFalse}}selected{{/if}}>No disponibles</option>
+</select>
+
+<select name="durationFilter">
+    <option value="" {{#unless durationFilter}}selected{{/unless}}>Todas</option>
+    <option value="less30" {{#if durationLess30}}selected{{/if}}>Menor a 30 min</option>
+    <option value="greater30" {{#if durationGreater30}}selected{{/if}}>Mayor a 30 min</option>
+</select>
+
+<select name="sortBy">
+    <option value="price" {{#if sortByPrice}}selected{{/if}}>Precio</option>
+    <option value="duration" {{#if sortByDuration}}selected{{/if}}>Duración</option>
+</select>
+
+<select name="order">
+    <option value="asc" {{#if orderAsc}}selected{{/if}}>Ascendente</option>
+    <option value="desc" {{#if orderDesc}}selected{{/if}}>Descendente</option>
+</select>
+
+<button type="submit">Filtrar</button>
+</form>
+
+
 
 {{#if services.length}}
-    <ul id="services-list">
+    <div class="cards">
         {{#each services}}
-    <div class="card">
-        <h2>{{this.name}}</h2>
-        <p>{{this.description}}</p>
-        <a class="btn" href="/views/services/{{this._id}}">Ver detalle</a>
-    </div>
+        <div class="card">
+            <h2>{{this.name}}</h2>
+            <p>{{this.description}}</p>
+            <p>Precio: ${{this.price}} | Duración: {{this.duration}} min</p>
+            <a class="btn" href="/views/services/{{this._id}}">Ver detalle</a>
+        </div>
     {{/each}}
-    </ul>
+    </div>
 {{else}}
     <p>No hay servicios disponibles.</p>
 {{/if}}
+
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="/views/services?page={{prevPage}}">Anterior</a>
+    {{/if}}
+    Página {{page}} de {{totalPages}}
+    {{#if hasNextPage}}
+        <a href="/views/services?page={{nextPage}}">Siguiente</a>
+    {{/if}}
+</div>
 </div>

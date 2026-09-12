@@ -41,6 +41,12 @@ src/
   public/
     css/style.css
     js/socket.js
+  validators/
+    addServiceToBooking.validator.js
+    booking.validator.js
+    service.validator.js
+  middlewares/
+    validate.js
   app.js
   server.js
 .env

@@ -1,4 +1,5 @@
 import BookingsDAO from "../dao/bookings.dao.js";
+import Booking from "../models/booking.model.js"
 
 export default class BookingsRepository {
     constructor() {
@@ -23,4 +24,13 @@ export default class BookingsRepository {
     async deleteBooking(id) {
         return await this.dao.deleteBooking(id);
 }
+
+    async getFiltered(filter, sort, skip, limit) {
+        return await Booking.find(filter).sort(sort).skip(skip).limit(limit).lean();
+}
+
+    async countDocuments(filter) {
+    return await Booking.countDocuments(filter);
+}
+
 }

@@ -1,24 +1,29 @@
-<div class="messages-container">
-    <h1>Mensajes</h1>
-    <form class="message-form">
-        <input type="text" name="user" placeholder="Tu nombre" required>
-        <textarea name="text" placeholder="Escribe tu mensaje..." required></textarea>
-        <button type="submit" class="btn">Enviar mensaje</button>
-    </form>
-    <hr>
+<form method="GET" action="/views/messages">
+<select name="order">
+    <option value="asc" {{#if orderIsAsc}}selected{{/if}}>Ascendente</option>
+    <option value="desc" {{#if orderIsDesc}}selected{{/if}}>Descendente</option>
+</select>
+<button type="submit">Ordenar</button>
+</form>
+
+<form class="message-form">
+    <input type="text" name="user" placeholder="Tu nombre" required>
+    <textarea name="text" placeholder="Escribe tu mensaje..." required></textarea>
+    <button type="submit" class="btn">Enviar mensaje</button>
+</form>
+<hr>
 
 {{#if messages.length}}
-    {{#each messages}}
+{{#each messages}}
     <div class="message-card">
         <h2>{{this.user}}</h2>
         <p>{{this.text}}</p>
         <small>{{this.timestamp}}</small>
     </div>
-    {{/each}}
+{{/each}}
 {{else}}
     <p class="empty">No hay mensajes registrados.</p>
 {{/if}}
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/socket.js"></script>
-</div>
