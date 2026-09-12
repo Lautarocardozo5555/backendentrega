@@ -1,5 +1,5 @@
-# Sistema de Turnos y Reservas (entrega 6)
-Proyecto desarrollado en Node.js con Express y persistencia en MongoDB Atlas. La aplicación permite administrar **servicios** y **reservas**, organizada bajo una **arquitectura en capas**.
+# Sistema de Turnos y Reservas (entrega 7)
+Proyecto desarrollado en Node.js con Express y persistencia en MongoDB Atlas. La aplicación permite administrar **servicios**, **reservas** y **mensajes**, organizada bajo una **arquitectura en capas** con actualización en tiempo real mediante **Socket.IO**.
 
 ## Instalacion
 ```bash
@@ -38,6 +38,9 @@ src/
   models/
     service.model.js
     booking.model.js
+  public/
+    css/style.css
+    js/socket.js
   app.js
   server.js
 .env
@@ -60,6 +63,8 @@ Service: contiene reglas de negocio (ejemplo: validación de campos, incremento 
 Repository: expone métodos de acceso a datos sin lógica de negocio.
 
 DAO: accede directamente a la base de datos.
+
+MongoDB Atlas: almacena los documentos en colecciones (services, bookings,. messages)
 
 ## Endpoints
 GET /api/services ====> Lista todos los servicios
@@ -91,6 +96,17 @@ POST /api/bookings/:bid/services/:sid ====> Agrega un servicio a una reserva
   "date": "2026-08-01",
   "time": "10:00",
   "status": "pendiente"
+}
+
+## Messages
+GET /api/messages → lista todos los mensajes.
+
+POST /api/messages → crea un mensaje nuevo y lo emite en tiempo real vía Socket.IO.
+
+##Ejemplo body para crear un mensaje:
+{
+  "user": "Lauti",
+  "text": "Hola, este es un mensaje en tiempo real"
 }
 
 ## Persistencia
