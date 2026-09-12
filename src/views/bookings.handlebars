@@ -1,0 +1,17 @@
+<div class="container">
+    <h1>Reservas</h1>
+
+    {{#if bookings.length}}
+    <div class="cards">
+        {{#each bookings}}
+        <div class="card">
+            <h2>{{this.clientName}}</h2>
+            <p>Fecha: {{this.date}} | Hora: {{this.time}}</p>
+            <a class="btn" href="/views/bookings/{{this._id}}">Ver detalle</a>
+        </div>
+        {{/each}}
+    </div>
+{{else}}
+    <p>No hay reservas registradas.</p>
+{{/if}}
+</div>

@@ -7,6 +7,6 @@ export default class MessagesDAO {
 }
 
     async getMessages() {
-        return await Message.find();
+        return await Message.find().lean();
 }
 }

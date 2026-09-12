@@ -2,7 +2,7 @@ import Booking from "../models/booking.model.js";
 
 export default class BookingsDAO {
     async getBookings() {
-        return await Booking.find().populate("services.service");
+        return await Booking.find().populate("services.service").lean();
 }
 
     async createBooking(data) {
@@ -11,7 +11,7 @@ export default class BookingsDAO {
 }
 
     async getBookingById(id) {
-        return await Booking.findById(id).populate("services.service");
+        return await Booking.findById(id).populate("services.service").lean();
 }
 
     async addServiceToBooking(bid, sid, quantity = 1) {
@@ -22,6 +22,6 @@ export default class BookingsDAO {
     return await booking.save();
 }
     async deleteBooking(id) {
-        return await Booking.findByIdAndDelete(id);
+        return await Booking.findByIdAndDelete(id).lean();
 }
 }

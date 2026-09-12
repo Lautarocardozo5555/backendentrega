@@ -1,0 +1,24 @@
+<div class="messages-container">
+    <h1>Mensajes</h1>
+    <form class="message-form">
+        <input type="text" name="user" placeholder="Tu nombre" required>
+        <textarea name="text" placeholder="Escribe tu mensaje..." required></textarea>
+        <button type="submit" class="btn">Enviar mensaje</button>
+    </form>
+    <hr>
+
+{{#if messages.length}}
+    {{#each messages}}
+    <div class="message-card">
+        <h2>{{this.user}}</h2>
+        <p>{{this.text}}</p>
+        <small>{{this.timestamp}}</small>
+    </div>
+    {{/each}}
+{{else}}
+    <p class="empty">No hay mensajes registrados.</p>
+{{/if}}
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/socket.js"></script>
+</div>

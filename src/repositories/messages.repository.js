@@ -1,15 +1,13 @@
-import MessagesDAO from "../dao/messages.dao.js";
+import Message from "../models/message.model.js";
 
 export default class MessagesRepository {
-    constructor() {
-        this.dao = new MessagesDAO();
-}
-
     async createMessage(data) {
-        return await this.dao.createMessage(data);
-}
+        const newMessage = new Message(data);
+        return await newMessage.save();
+    }
 
     async getAll() {
-        return await this.dao.getMessages();
+        return await Message.find().lean();
+    }
 }
-}
+

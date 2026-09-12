@@ -1,0 +1,17 @@
+<div class="container">
+<h1>Servicios disponibles</h1>
+
+{{#if services.length}}
+    <ul id="services-list">
+        {{#each services}}
+    <div class="card">
+        <h2>{{this.name}}</h2>
+        <p>{{this.description}}</p>
+        <a class="btn" href="/views/services/{{this._id}}">Ver detalle</a>
+    </div>
+    {{/each}}
+    </ul>
+{{else}}
+    <p>No hay servicios disponibles.</p>
+{{/if}}
+</div>

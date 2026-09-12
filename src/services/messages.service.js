@@ -15,7 +15,7 @@ export default class MessagesService {
     return await this.repository.createMessage(data);
 }
 
-    async getMessages() {
+    async getAllMessages() {
         return await this.repository.getAll();
 }
 }

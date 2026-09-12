@@ -1,0 +1,25 @@
+<div class="container">
+    <h1>Detalle de la reserva</h1>
+
+<div class="card detail">
+    <p><strong>Cliente:</strong> {{booking.clientName}}</p>
+    <p><strong>Email:</strong> {{booking.clientEmail}}</p>
+    <p><strong>Fecha:</strong> {{booking.date}}</p>
+    <p><strong>Hora:</strong> {{booking.time}}</p>
+    <p><strong>Estado:</strong> {{booking.status}}</p>
+
+    {{#if booking.services.length}}
+        <h3>Servicios asociados:</h3>
+    <ul>
+        {{#each booking.services}}
+            <li>
+                {{this.service.name}} (Cantidad: {{this.quantity}})
+            </li>
+        {{/each}}
+    </ul>
+    <p><strong>Total:</strong> ${{booking.totalPrice}}</p>
+    {{/if}}
+</div>
+
+    <a class="btn back" href="/views/bookings">Volver a la lista</a>
+</div>
