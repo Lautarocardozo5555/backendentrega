@@ -1,4 +1,4 @@
-# Sistema de Turnos y Reservas (entrega 7)
+# Sistema de Turnos y Reservas (entrega 8)
 Proyecto desarrollado en Node.js con Express y persistencia en MongoDB Atlas. La aplicación permite administrar **servicios**, **reservas** y **mensajes**, organizada bajo una **arquitectura en capas** con actualización en tiempo real mediante **Socket.IO**.
 
 ## Instalacion
