@@ -12,7 +12,7 @@
     <button type="submit" class="btn">Enviar mensaje</button>
 </form>
 <hr>
-
+<div class="messages-container">
 {{#if messages.length}}
 {{#each messages}}
     <div class="message-card">
@@ -24,6 +24,7 @@
 {{else}}
     <p class="empty">No hay mensajes registrados.</p>
 {{/if}}
-
+</div>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/socket.js"></script>
+<script type="module" src="/js/messages.js"></script>
+

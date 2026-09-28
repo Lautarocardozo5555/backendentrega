@@ -4,7 +4,8 @@ import {
     getBookingById,
     addServiceToBooking,
     deleteBooking,
-    getBookings
+    getBookings,
+    updateBooking
 } from "../controllers/bookings.controller.js";
 import { validate } from "../middlewares/validate.js";
 import { bookingSchema } from "../validators/booking.validator.js";
@@ -16,6 +17,7 @@ router.get("/", getBookings)
 router.post("/", validate(bookingSchema), createBooking);
 router.get("/:bid", getBookingById);
 router.post("/:bid/services/:sid", validate(addServiceToBookingSchema), addServiceToBooking);
+router.put("/:bid", updateBooking);
 router.delete("/:bid", deleteBooking);
 
 export default router;

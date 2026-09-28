@@ -14,6 +14,11 @@ export default class BookingsDAO {
         return await Booking.findById(id).populate("services.service").lean();
 }
 
+async updateBooking(id, data) {
+    return await Booking.findByIdAndUpdate(id, data, { new: true }).lean();
+}
+
+
     async addServiceToBooking(bid, sid, quantity = 1) {
         const booking = await Booking.findById(bid);
         if (!booking) return null;

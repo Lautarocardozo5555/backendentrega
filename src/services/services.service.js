@@ -46,41 +46,60 @@ export default class ServicesService {
 }
 
     async getAdvancedServices(query) {
-        const { category, available, durationFilter,
-        page = 1, limit = 3, sortBy = "name", order = "asc" } = query;
+        const {
+            category,
+            available,
+            durationFilter,
+            page = 1,
+            limit = 3,
+            sortBy = "name",
+            order = "asc"
+    } = query;
 
-        const filter = {};
+    // ✅ Lista blanca de campos permitidos para ordenar
+    const allowedSortFields = ["name", "price", "duration", "category"];
+    if (!allowedSortFields.includes(sortBy)) {
+        throw new Error(
+        `Campo de ordenamiento inválido: ${sortBy}. Permitidos: ${allowedSortFields.join(", ")}`
+        );
+    }
+
+    // Filtros dinámicos
+    const filter = {};
     if (category) filter.category = category;
-    if (available !== undefined && available !== "") filter.available = available === "true";
+    if (available !== undefined && available !== "")
+        filter.available = available === "true";
 
     if (durationFilter === "less30") {
-    filter.duration = { $lt: 30 };
-}
+        filter.duration = { $lt: 30 };
+    }
     if (durationFilter === "greater30") {
-    filter.duration = { $gt: 30 };
-}
+        filter.duration = { $gt: 30 };
+    }
 
+    // Ordenamiento
     const sort = {};
     sort[sortBy] = order === "desc" ? -1 : 1;
 
-  const skip = (page - 1) * limit;
+    // Paginación
+    const skip = (page - 1) * limit;
 
+    // Consulta al repositorio
     const [docs, totalDocs] = await Promise.all([
-    this.repository.getFiltered(filter, sort, skip, limit),
-    this.repository.countDocuments(filter)
-]);
+        this.repository.getFiltered(filter, sort, skip, limit),
+        this.repository.countDocuments(filter)
+    ]);
 
     const totalPages = Math.ceil(totalDocs / limit);
 
-return {
-    payload: docs,
-    page: Number(page),
-    limit: Number(limit),
-    totalDocs,
-    totalPages,
-    hasPrevPage: page > 1,
-    hasNextPage: page < totalPages
-};
+    return {
+        payload: docs,
+        page: Number(page),
+        limit: Number(limit),
+        totalDocs,
+        totalPages,
+        hasPrevPage: page > 1,
+        hasNextPage: page < totalPages
+    };
 }
-
 }

@@ -26,6 +26,13 @@ export default class BookingsService {
     }
     return booking;
 }
+    async updateBooking(id, data) {
+        const booking = await this.repository.getBookingById(id);
+    if (!booking) {
+    throw new Error("Reserva no encontrada");
+}
+    return await this.repository.updateBooking(id, data);
+}
 
     async addServiceToBooking(bid, sid, quantity) {
         const booking = await this.repository.getBookingById(bid);

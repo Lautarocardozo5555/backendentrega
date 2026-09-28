@@ -9,16 +9,50 @@
 <button type="submit">Ordenar</button>
 </form>
 
+<form class="booking-form" method="POST" action="/api/bookings">
+    <input type="text" name="clientName" placeholder="Nombre del cliente" required>
+    <input type="email" name="clientEmail" placeholder="Email del cliente" required>
+    <input type="date" name="date" required>
+    <input type="time" name="time" required>
+    <select name="status" required>
+    <option value="pendiente">Pendiente</option>
+    <option value="confirmada">Confirmada</option>
+    <option value="cancelada">Cancelada</option>
+    </select>
+    <button type="submit">Crear reserva</button>
+</form>
+
+
 {{#if bookings.length}}
-    <div class="cards">
-        {{#each bookings}}
-        <div class="card">
-            <h2>{{this.clientName}}</h2>
-            <p>Fecha: {{this.date}} | Hora: {{this.time}}</p>
-            <a class="btn" href="/views/bookings/{{this._id}}">Ver detalle</a>
-        </div>
-    {{/each}}
+<div class="cards">
+    {{#each bookings}}
+<div class="card" data-id="{{this._id}}">
+    <h2>{{this.clientName}}</h2>
+    <p>Fecha: {{this.date}} | Hora: {{this.time}}</p>
+
+    <!-- Botones de acción -->
+    <div class="actions">
+        <a class="btn" href="/views/bookings/{{this._id}}">Ver detalle</a>
+        <button class="btn update-btn" data-id="{{this._id}}">Actualizar</button>
+        <button class="btn delete-btn" data-id="{{this._id}}">Eliminar</button>
     </div>
+
+    <!-- Formulario oculto de edición -->
+    <form class="booking-edit-form" data-id="{{this._id}}" style="display:none;">
+        <input type="text" name="clientName" value="{{this.clientName}}">
+        <input type="email" name="clientEmail" value="{{this.clientEmail}}">
+        <input type="date" name="date" value="{{this.date}}">
+        <input type="time" name="time" value="{{this.time}}">
+    <select name="status">
+        <option value="pendiente" {{#if (eq this.status "pendiente")}}selected{{/if}}>Pendiente</option>
+        <option value="confirmada" {{#if (eq this.status "confirmada")}}selected{{/if}}>Confirmada</option>
+        <option value="cancelada" {{#if (eq this.status "cancelada")}}selected{{/if}}>Cancelada</option>
+    </select>
+    <button type="submit">Guardar cambios</button>
+    </form>
+</div>
+{{/each}}
+</div>
 {{else}}
     <p>No hay reservas registradas.</p>
 {{/if}}
@@ -33,3 +67,5 @@
     {{/if}}
 </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/bookings.js"></script>

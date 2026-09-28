@@ -34,19 +34,51 @@
 <button type="submit">Filtrar</button>
 </form>
 
+<form class="service-form">
+    <input type="text" name="name" placeholder="Nombre" required>
+    <input type="text" name="description" placeholder="Descripción" required>
+    <input type="number" name="price" placeholder="Precio" required>
+    <input type="number" name="duration" placeholder="Duración (min)" required>
+    <input type="text" name="category" placeholder="Categoría" required>
+    <select name="available">
+        <option value="true">Disponible</option>
+        <option value="false">No disponible</option>
+    </select>
+    <button type="submit">Crear servicio</button>
+</form>
 
 
 {{#if services.length}}
-    <div class="cards">
-        {{#each services}}
-        <div class="card">
-            <h2>{{this.name}}</h2>
-            <p>{{this.description}}</p>
-            <p>Precio: ${{this.price}} | Duración: {{this.duration}} min</p>
-            <a class="btn" href="/views/services/{{this._id}}">Ver detalle</a>
-        </div>
-    {{/each}}
+<div class="cards">
+    {{#each services}}
+    <div class="card" data-id="{{this._id}}">
+        <h2>{{this.name}}</h2>
+        <p>{{this.description}}</p>
+        <p>Precio: ${{this.price}} | Duración: {{this.duration}} min</p>
+
+    <!-- Botones de acción -->
+    <div class="actions">
+        <a class="btn" href="/views/services/{{this._id}}">Ver detalle</a>
+        <button class="btn update-btn" data-id="{{this._id}}">Actualizar</button>
+        <button class="btn delete-btn" data-id="{{this._id}}">Eliminar</button>
     </div>
+
+    <!-- Formulario oculto de edición -->
+    <form class="service-edit-form" data-id="{{this._id}}" style="display:none;">
+        <input type="text" name="name" value="{{this.name}}">
+        <input type="text" name="description" value="{{this.description}}">
+        <input type="number" name="price" value="{{this.price}}">
+        <input type="number" name="duration" value="{{this.duration}}">
+        <input type="text" name="category" value="{{this.category}}">
+    <select name="available">
+        <option value="true" {{#if this.available}}selected{{/if}}>Disponible</option>
+        <option value="false" {{#unless this.available}}selected{{/unless}}>No disponible</option>
+    </select>
+    <button type="submit">Guardar cambios</button>
+    </form>
+</div>
+{{/each}}
+</div>
 {{else}}
     <p>No hay servicios disponibles.</p>
 {{/if}}
@@ -61,3 +93,5 @@
     {{/if}}
 </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/services.js"></script>

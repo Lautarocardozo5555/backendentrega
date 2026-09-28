@@ -1,8 +1,8 @@
-# Sistema de Turnos y Reservas (entrega 8)
+# Sistema de Turnos y Reservas (entrega final)
 Proyecto desarrollado en Node.js con Express y persistencia en MongoDB Atlas. La aplicación permite administrar **servicios**, **reservas** y **mensajes**, organizada bajo una **arquitectura en capas** con actualización en tiempo real mediante **Socket.IO**.
 
 ## Instalacion
-```bash
+
 npm install
 
 ## Ejecución
@@ -40,7 +40,11 @@ src/
     booking.model.js
   public/
     css/style.css
-    js/socket.js
+    js/
+       services.js
+       bookings.js
+       utils.js
+       messages.js
   validators/
     addServiceToBooking.validator.js
     booking.validator.js
@@ -70,7 +74,7 @@ Repository: expone métodos de acceso a datos sin lógica de negocio.
 
 DAO: accede directamente a la base de datos.
 
-MongoDB Atlas: almacena los documentos en colecciones (services, bookings,. messages)
+MongoDB Atlas: almacena los documentos en colecciones (services, bookings,messages)
 
 ## Endpoints
 GET /api/services ====> Lista todos los servicios
@@ -109,11 +113,43 @@ GET /api/messages → lista todos los mensajes.
 
 POST /api/messages → crea un mensaje nuevo y lo emite en tiempo real vía Socket.IO.
 
-##Ejemplo body para crear un mensaje:
+## Ejemplo body para crear un mensaje:
 {
   "user": "Lauti",
   "text": "Hola, este es un mensaje en tiempo real"
 }
+
+## Parámetros de consulta avanzada
+
+Los endpoints soportan filtros, ordenamiento y paginación mediante query params:
+
+|Parámetro| Tipo|descripcion 
+`category`|string|Filtra por categoría   
+`available`|boolean|Filtra por disponibilidad (`true` o `false`)
+`minPrice`|number|Precio mínimo
+`maxprice`|number| Precio máximo     
+`minDuration`|number|Duración mínima en minutos    
+`maxDuration`|number|Duración máxima en minutos  
+`sortBy`|string| Campo de ordenamiento (`price`, `duration`, `name`)
+`order`|string|Dirección de orden (`asc` o `desc`) 
+`page`|number|Número de página para paginación
+`limit`|number|Cantidad de resultados por página  
+
+**Ejemplo de consulta avanzada:**
+GET /api/services?category=Estética&available=true&minPrice=500&maxPrice=2000&sortBy=price&order=asc&page=1&limit=5
+
+
+Esto devuelve los servicios de la categoría **Estética**, disponibles, con precio entre 500 y 2000, ordenados por precio ascendente, mostrando la primera página con 5 resultados.
+
+## Vistas con handlebars
+/views/services.handlebars ===> Lista de servicios con filtros y CRUD.
+/views/bookings.handlebars ===> Lista de reservas con CRUD y detalle.
+/views/messages.handlebars ===> Chat en tiempo real.
+
+## Tiempo real con Socket.IO
+Servicios: Creación, actualización y eliminaciión en vivo.
+Reservas: Actualización y eliminación en vivo.
+Mensajes: Chat en tiempo real con alertas.
 
 ## Persistencia
 Los datos se guardan en MongoDB Atlas con las colecciones: services, bookings y messages

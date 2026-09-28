@@ -1,4 +1,5 @@
 import ServicesService from "../services/services.service.js";
+import { io } from "../server.js"
 
 const service = new ServicesService();
 
@@ -24,6 +25,7 @@ try {
 export const createService = async (req, res) => {
 try {
     const newService = await service.createService(req.body);
+    io.emit("serviceUpdated", {action:"created", service:newService})
     res.status(201).json({ status: "success", payload: newService });
 } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
@@ -34,16 +36,19 @@ export const updateService = async (req, res) => {
 try {
     const { sid } = req.params;
     const updated = await service.updateService(sid, req.body);
+    io.emit("serviceUpdated", { action: "updated", service: updated }); // evento socket
     res.status(200).json({ status: "success", payload: updated });
 } catch (error) {
     res.status(404).json({ status: "error", message: error.message });
 }
 };
 
+
 export const deleteService = async (req, res) => {
 try {
     const { sid } = req.params;
     await service.deleteService(sid);
+    io.emit("serviceDeleted", { id: sid }); 
     res.status(200).json({ status: "success", message: "Servicio eliminado" });
 } catch (error) {
     res.status(404).json({ status: "error", message: error.message });

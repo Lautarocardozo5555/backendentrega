@@ -17,6 +17,9 @@ export default class BookingsRepository {
     async getBookingById(id) {
         return await this.dao.getBookingById(id);
 }
+    async updateBooking(id, data) {
+        return await this.dao.updateBooking(id, data);
+}
 
     async addServiceToBooking(bid, sid, quantity) {
         return await this.dao.addServiceToBooking(bid, sid, quantity);

@@ -9,11 +9,15 @@ import viewsRouter from "./routes/views.router.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
+const hbs = handlebars.create({
+    helpers: {
+        eq:(a,b) => a === b
+    }
+})
 const app = express();
 
 //configuracion de handlebars
-app.engine("handlebars", handlebars.engine())
+app.engine("handlebars", hbs.engine)
 app.set("view engine", "handlebars")
 app.set("views", path.join(__dirname, "views"))
 

@@ -13,8 +13,8 @@ const router = Router();
 
 router.get('/', getServices);
 router.get('/:sid', getServiceById);
-router.post("/", validate(serviceSchema), createService);
-router.put("/:sid", validate(serviceSchema), updateService);
+router.post("/", createService);
+router.put("/:sid", updateService);
 router.delete('/:sid', deleteService);
 
 export default router;
